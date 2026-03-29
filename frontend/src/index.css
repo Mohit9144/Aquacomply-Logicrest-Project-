@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-industrial-50 text-industrial-800 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-white/40 shadow-glass rounded-2xl;
+  }
+  
+  .glass-card {
+    @apply bg-white border border-industrial-200 shadow-premium rounded-xl hover:shadow-lg transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-brand-main text-white px-5 py-2.5 rounded-lg font-medium shadow-md shadow-brand-main/20 hover:bg-brand-dark hover:-translate-y-0.5 transition-all duration-200 focus:ring-4 focus:ring-brand-main/30;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-industrial-700 border border-industrial-300 px-5 py-2.5 rounded-lg font-medium hover:bg-industrial-50 hover:border-industrial-400 transition-all duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-industrial-200 bg-industrial-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-main/50 focus:border-brand-main transition-all duration-200;
+  }
+
+  .badge-success {
+    @apply bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+
+  .badge-warning {
+    @apply bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+
+  .badge-danger {
+    @apply bg-rose-50 text-rose-700 border border-rose-200 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  
+  .water-flow-dirty {
+    background: linear-gradient(90deg, #d4d4d8 0%, #a1a1aa 50%, #d4d4d8 100%);
+    background-size: 200% 100%;
+    animation: flow 2s linear infinite;
+  }
+
+  .water-flow-clean {
+    background: linear-gradient(90deg, #38bdf8 0%, #7dd3fc 50%, #38bdf8 100%);
+    background-size: 200% 100%;
+    animation: flow 2s linear infinite;
+  }
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9; 
+  border-radius: 4px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; 
+}

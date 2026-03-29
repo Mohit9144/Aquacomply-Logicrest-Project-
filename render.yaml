@@ -1,0 +1,46 @@
+databases:
+  - name: reacto-postgres
+    databaseName: reacto_db
+    user: reacto_user
+    plan: free
+
+services:
+  - type: redis
+    name: reacto-redis
+    ipAllowList: []
+    plan: free
+
+  - type: web
+    name: reacto-backend
+    env: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: reacto-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: reacto-redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+
+  - type: static
+    name: reacto-frontend
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: build
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: REACT_APP_API_BASE_URL
+        sync: false
+      - key: REACT_APP_WS_BASE_URL
+        sync: false

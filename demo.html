@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reacto Platform - Water Treatment Monitoring System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .kpi-card { @apply bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-200; }
+        .kpi-value { @apply text-2xl font-bold text-gray-900; }
+        .kpi-title { @apply text-sm font-medium text-gray-600 mb-2; }
+        .status-normal { @apply text-green-600 bg-green-50; }
+        .status-warning { @apply text-yellow-600 bg-yellow-50; }
+        .status-critical { @apply text-red-600 bg-red-50; }
+        .alert-card { @apply bg-white rounded-lg shadow-sm p-4 border-l-4 mb-3; }
+        .alert-critical { @apply border-red-500 bg-red-50; }
+        .alert-warning { @apply border-yellow-500 bg-yellow-50; }
+        .alert-low { @apply border-blue-500 bg-blue-50; }
+
+        .reacto-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reacto-brand-mark {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            filter: drop-shadow(0 8px 14px rgba(7, 132, 181, 0.25));
+        }
+
+        .reacto-brand-mark::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 999px;
+            background: conic-gradient(from 130deg, rgba(57, 172, 231, 0.08), rgba(7, 132, 181, 0.28), rgba(46, 125, 50, 0.2), rgba(57, 172, 231, 0.08));
+            z-index: -1;
+            animation: reactoHaloSpin 6s linear infinite;
+        }
+
+        .reacto-brand-word {
+            font-size: 1.12rem;
+            font-weight: 900;
+            letter-spacing: 0.03em;
+            background: linear-gradient(100deg, #0f4f7f 10%, #0784b5 46%, #0f4f7f 88%);
+            background-size: 220% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: reactoWordShine 4.3s ease-in-out infinite;
+        }
+
+        .reacto-drop { transform-origin: 52% 52%; animation: reactoDropFloat 4.1s ease-in-out infinite; }
+        .reacto-wave { transform-origin: 50% 50%; animation: reactoWaveSwing 4.1s ease-in-out infinite; }
+        .reacto-accent { animation: reactoAccentPulse 3.2s ease-in-out infinite; }
+
+        @keyframes reactoDropFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-1.7px) scale(1.02); }
+        }
+
+        @keyframes reactoWaveSwing {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-2deg); }
+        }
+
+        @keyframes reactoAccentPulse {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.12); }
+        }
+
+        @keyframes reactoHaloSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        @keyframes reactoWordShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="reacto-brand">
+                        <div class="reacto-brand-mark">
+                            <svg viewBox="0 0 64 64" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="demoDropGradient" x1="20" y1="8" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0" stop-color="#9bd4e4" />
+                                        <stop offset="0.52" stop-color="#39ace7" />
+                                        <stop offset="1" stop-color="#0784b5" />
+                                    </linearGradient>
+                                    <linearGradient id="demoWaveGradient" x1="10" y1="44" x2="58" y2="52" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0" stop-color="#3fb07f" />
+                                        <stop offset="1" stop-color="#0a7b63" />
+                                    </linearGradient>
+                                </defs>
+                                <g class="reacto-drop">
+                                    <path d="M34.4 6.8C28.2 14.1 22 22 22 30.7C22 39.9 29.4 47.3 38.6 47.3C47.8 47.3 55.2 39.9 55.2 30.7C55.2 22.6 49 15 42.5 8.1C40.3 5.8 36.7 5.8 34.4 6.8Z" fill="url(#demoDropGradient)" />
+                                    <path d="M33.5 18.5C31.1 21.8 29.8 24.6 29.8 27.4C29.8 32 33.6 35.8 38.2 35.8" stroke="#d8f4ff" stroke-width="2.5" stroke-linecap="round" />
+                                </g>
+                                <g class="reacto-wave">
+                                    <path d="M8 45.4C17.7 38.6 27.8 37.4 39.3 40.3C46.4 42.1 52.6 42.1 58 39.8V45.8C51.7 49 44.8 49.7 36.9 47.8C25.7 45.1 17.4 45.6 8 53V45.4Z" fill="url(#demoWaveGradient)" />
+                                    <path d="M8.2 45.7C17.6 40.1 27.7 39.4 37.4 41.8C45.7 43.9 52.1 43.7 57.8 40.9" stroke="#e5fff5" stroke-width="1.8" stroke-linecap="round" opacity="0.62" />
+                                </g>
+                                <circle class="reacto-accent" cx="11.2" cy="20.2" r="2.35" fill="#ff7c6e" />
+                            </svg>
+                        </div>
+                        <span class="reacto-brand-word">REACTO</span>
+                    </div>
+                </div>
+                <nav class="flex space-x-4">
+                    <a href="#" class="text-blue-600 font-medium">Dashboard</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Live Monitoring</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Alerts</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Reports</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Settings</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Welcome, Hotel Paradise</h2>
+            <p class="text-gray-600 mt-1">Plant: Main STP Facility</p>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Key Performance Indicators</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">Inflow</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-normal">Normal</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">125.5</span>
+                            <span class="ml-1 text-sm text-gray-500">MLD</span>
+                        </div>
+                        <i data-lucide="minus" class="w-4 h-4 text-gray-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">Treated Water</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-normal">Normal</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">118.2</span>
+                            <span class="ml-1 text-sm text-gray-500">MLD</span>
+                        </div>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">Reused Water</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-normal">Normal</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">85.7</span>
+                            <span class="ml-1 text-sm text-gray-500">MLD</span>
+                        </div>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">BOD</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-critical">Critical</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">45.8</span>
+                            <span class="ml-1 text-sm text-gray-500">mg/L</span>
+                        </div>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-red-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">COD</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-warning">Warning</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">285.3</span>
+                            <span class="ml-1 text-sm text-gray-500">mg/L</span>
+                        </div>
+                        <i data-lucide="minus" class="w-4 h-4 text-gray-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">Turbidity</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-normal">Normal</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">3.2</span>
+                            <span class="ml-1 text-sm text-gray-500">NTU</span>
+                        </div>
+                        <i data-lucide="trending-down" class="w-4 h-4 text-red-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">Chlorine</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-normal">Normal</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">0.8</span>
+                            <span class="ml-1 text-sm text-gray-500">mg/L</span>
+                        </div>
+                        <i data-lucide="minus" class="w-4 h-4 text-gray-500"></i>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="kpi-title">Efficiency</h3>
+                        <div class="px-2 py-1 rounded-full text-xs font-medium status-normal">Good</div>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="kpi-value">72.5</span>
+                            <span class="ml-1 text-sm text-gray-500">%</span>
+                        </div>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 flex items-center space-x-3 cursor-pointer">
+                    <i data-lucide="eye" class="w-8 h-8 text-blue-600"></i>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Live Monitoring</h4>
+                        <p class="text-sm text-gray-600">View real-time data</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 flex items-center space-x-3 cursor-pointer">
+                    <i data-lucide="alert-triangle" class="w-8 h-8 text-yellow-600"></i>
+                    <div>
+                        <h4 class="font-medium text-gray-900">View Alerts</h4>
+                        <p class="text-sm text-gray-600">Check notifications</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 flex items-center space-x-3 cursor-pointer">
+                    <i data-lucide="bar-chart-3" class="w-8 h-8 text-green-600"></i>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Monthly Report</h4>
+                        <p class="text-sm text-gray-600">View analytics</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 flex items-center space-x-3 cursor-pointer">
+                    <i data-lucide="settings" class="w-8 h-8 text-gray-600"></i>
+                    <div>
+                        <h4 class="font-medium text-gray-900">Settings</h4>
+                        <p class="text-sm text-gray-600">Manage preferences</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Alerts</h3>
+                <a href="#" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View all alerts</a>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="alert-card alert-critical">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">High BOD Levels</h4>
+                                <p class="text-sm text-gray-700 mt-1">BOD level critically high at 45.8 mg/L</p>
+                                <p class="text-sm text-gray-600 mt-2 italic">Action: Increase aeration time and check MLSS concentration</p>
+                                <p class="text-xs text-gray-500 mt-2">2 hours ago</p>
+                            </div>
+                        </div>
+                        <button class="text-xs text-gray-500 hover:text-gray-700 underline">Mark as read</button>
+                    </div>
+                </div>
+
+                <div class="alert-card alert-warning">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600"></i>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">Elevated COD</h4>
+                                <p class="text-sm text-gray-700 mt-1">COD level above normal range at 285.3 mg/L</p>
+                                <p class="text-sm text-gray-600 mt-2 italic">Action: Optimize chemical dosing for coagulation</p>
+                                <p class="text-xs text-gray-500 mt-2">4 hours ago</p>
+                            </div>
+                        </div>
+                        <button class="text-xs text-gray-500 hover:text-gray-700 underline">Mark as read</button>
+                    </div>
+                </div>
+
+                <div class="alert-card alert-low">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600"></i>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">Maintenance Reminder</h4>
+                                <p class="text-sm text-gray-700 mt-1">Monthly sensor calibration due</p>
+                                <p class="text-sm text-gray-600 mt-2 italic">Action: Schedule calibration for pH and DO sensors</p>
+                                <p class="text-xs text-gray-500 mt-2">1 day ago</p>
+                            </div>
+                        </div>
+                        <button class="text-xs text-gray-500 hover:text-gray-700 underline">Mark as read</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operations Guidance -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <i data-lucide="brain" class="w-5 h-5 mr-2 text-blue-600"></i>
+                    Operations Guidance
+                </h3>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span class="text-xs text-gray-500">Real-time analysis</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-semibold text-gray-900">System Analysis</h4>
+                    <div class="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">WARNING</div>
+                </div>
+
+                <!-- Efficiency Score -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-700">Overall Efficiency</span>
+                        <span class="text-sm font-bold text-gray-900">72%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="h-3 rounded-full transition-all duration-500 bg-yellow-500" style="width: 72%"></div>
+                    </div>
+                </div>
+
+                <!-- Issues -->
+                <div class="space-y-3 mb-6">
+                    <h4 class="text-sm font-semibold text-gray-900">Issues Detected</h4>
+                    <div class="p-3 rounded-lg border-l-4 bg-red-50 border-red-500">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 mt-0.5 text-red-600"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">BOD level critically high at 45.8 mg/L</p>
+                                <p class="text-xs text-gray-600 mt-1">Current: 45.8 | Threshold: 30</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 rounded-lg border-l-4 bg-yellow-50 border-yellow-500">
+                        <div class="flex items-start space-x-3">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 mt-0.5 text-yellow-600"></i>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-900">COD level elevated at 285.3 mg/L</p>
+                                <p class="text-xs text-gray-600 mt-1">Current: 285.3 | Threshold: 250</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operational Priorities -->
+                <div class="space-y-2">
+                    <h4 class="text-sm font-semibold text-gray-900">Operational Priorities</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-start space-x-2 text-sm text-gray-700">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></i>
+                            <span>Increase aeration time in the biological treatment unit</span>
+                        </div>
+                        <div class="flex items-start space-x-2 text-sm text-gray-700">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></i>
+                            <span>Check and maintain optimal dissolved oxygen levels (2-4 mg/L)</span>
+                        </div>
+                        <div class="flex items-start space-x-2 text-sm text-gray-700">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"></i>
+                            <span>Optimize chemical dosing for coagulation and flocculation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm text-gray-700">System Online</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 text-gray-500"></i>
+                    <span class="text-sm text-gray-700">Auto-refresh enabled</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="activity" class="w-4 h-4 text-gray-500"></i>
+                    <span class="text-sm text-gray-700">12 sensors active</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-10 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center justify-center mb-3">
+                <div class="reacto-brand">
+                    <div class="reacto-brand-mark">
+                        <svg viewBox="0 0 64 64" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="demoFooterDropGradient" x1="20" y1="8" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#9bd4e4" />
+                                    <stop offset="0.52" stop-color="#39ace7" />
+                                    <stop offset="1" stop-color="#0784b5" />
+                                </linearGradient>
+                                <linearGradient id="demoFooterWaveGradient" x1="10" y1="44" x2="58" y2="52" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#3fb07f" />
+                                    <stop offset="1" stop-color="#0a7b63" />
+                                </linearGradient>
+                            </defs>
+                            <g class="reacto-drop">
+                                <path d="M34.4 6.8C28.2 14.1 22 22 22 30.7C22 39.9 29.4 47.3 38.6 47.3C47.8 47.3 55.2 39.9 55.2 30.7C55.2 22.6 49 15 42.5 8.1C40.3 5.8 36.7 5.8 34.4 6.8Z" fill="url(#demoFooterDropGradient)" />
+                                <path d="M33.5 18.5C31.1 21.8 29.8 24.6 29.8 27.4C29.8 32 33.6 35.8 38.2 35.8" stroke="#d8f4ff" stroke-width="2.5" stroke-linecap="round" />
+                            </g>
+                            <g class="reacto-wave">
+                                <path d="M8 45.4C17.7 38.6 27.8 37.4 39.3 40.3C46.4 42.1 52.6 42.1 58 39.8V45.8C51.7 49 44.8 49.7 36.9 47.8C25.7 45.1 17.4 45.6 8 53V45.4Z" fill="url(#demoFooterWaveGradient)" />
+                                <path d="M8.2 45.7C17.6 40.1 27.7 39.4 37.4 41.8C45.7 43.9 52.1 43.7 57.8 40.9" stroke="#e5fff5" stroke-width="1.8" stroke-linecap="round" opacity="0.62" />
+                            </g>
+                            <circle class="reacto-accent" cx="11.2" cy="20.2" r="2.35" fill="#ff7c6e" />
+                        </svg>
+                    </div>
+                    <span class="reacto-brand-word">REACTO</span>
+                </div>
+            </div>
+            <p class="text-sm text-gray-400">&copy; 2026 Reacto Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // Update random KPI values slightly
+            const kpiValues = document.querySelectorAll('.kpi-value');
+            if (kpiValues.length > 0) {
+                const randomKpi = kpiValues[Math.floor(Math.random() * 3)];
+                const currentValue = parseFloat(randomKpi.textContent);
+                const change = (Math.random() - 0.5) * 2;
+                const newValue = (currentValue + change).toFixed(1);
+                randomKpi.textContent = newValue;
+            }
+        }, 5000);
+
+        // Add click handlers for demo
+        document.querySelectorAll('.cursor-pointer').forEach(element => {
+            element.addEventListener('click', function() {
+                const title = this.querySelector('h4').textContent;
+                console.log(`Clicked: ${title}`);
+            });
+        });
+
+        // Alert interactions
+        document.querySelectorAll('.alert-card button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.textContent = 'Marked as read';
+                this.disabled = true;
+                this.classList.add('text-gray-400');
+            });
+        });
+    </script>
+</body>
+</html>

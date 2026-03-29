@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reacto Platform - Industrial Water Treatment Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .industrial-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .industrial-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+        }
+        
+        .status-indicator {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .reacto-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reacto-brand-mark {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            filter: drop-shadow(0 8px 14px rgba(7, 132, 181, 0.28));
+        }
+
+        .reacto-brand-mark::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 999px;
+            background: conic-gradient(from 120deg, rgba(57, 172, 231, 0.08), rgba(7, 132, 181, 0.3), rgba(46, 125, 50, 0.2), rgba(57, 172, 231, 0.08));
+            z-index: -1;
+            animation: reactoHaloSpin 6.2s linear infinite;
+        }
+
+        .reacto-brand-word {
+            font-size: 1.28rem;
+            font-weight: 900;
+            letter-spacing: 0.03em;
+            background: linear-gradient(100deg, #0f4f7f 8%, #0784b5 47%, #0f4f7f 88%);
+            background-size: 220% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: reactoWordShine 4.1s ease-in-out infinite;
+        }
+
+        .reacto-drop {
+            transform-origin: 52% 52%;
+            animation: reactoDropFloat 4.1s ease-in-out infinite;
+        }
+
+        .reacto-wave {
+            transform-origin: 50% 50%;
+            animation: reactoWaveSwing 4.1s ease-in-out infinite;
+        }
+
+        .reacto-accent {
+            animation: reactoAccentPulse 3.2s ease-in-out infinite;
+        }
+
+        @keyframes reactoDropFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-1.8px) scale(1.02); }
+        }
+
+        @keyframes reactoWaveSwing {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-2.2deg); }
+        }
+
+        @keyframes reactoAccentPulse {
+            0%, 100% { opacity: 0.86; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.12); }
+        }
+
+        @keyframes reactoHaloSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        @keyframes reactoWordShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <!-- Navigation -->
+    <nav class="glass-effect sticky top-0 z-50 border-b border-white/20">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-3">
+                        <div class="reacto-brand">
+                            <div class="reacto-brand-mark">
+                                <svg viewBox="0 0 64 64" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <defs>
+                                        <linearGradient id="industrialDropGradient" x1="20" y1="8" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0" stop-color="#9bd4e4" />
+                                            <stop offset="0.52" stop-color="#39ace7" />
+                                            <stop offset="1" stop-color="#0784b5" />
+                                        </linearGradient>
+                                        <linearGradient id="industrialWaveGradient" x1="10" y1="44" x2="58" y2="52" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0" stop-color="#3fb07f" />
+                                            <stop offset="1" stop-color="#0a7b63" />
+                                        </linearGradient>
+                                    </defs>
+                                    <g class="reacto-drop">
+                                        <path d="M34.4 6.8C28.2 14.1 22 22 22 30.7C22 39.9 29.4 47.3 38.6 47.3C47.8 47.3 55.2 39.9 55.2 30.7C55.2 22.6 49 15 42.5 8.1C40.3 5.8 36.7 5.8 34.4 6.8Z" fill="url(#industrialDropGradient)" />
+                                        <path d="M33.5 18.5C31.1 21.8 29.8 24.6 29.8 27.4C29.8 32 33.6 35.8 38.2 35.8" stroke="#d8f4ff" stroke-width="2.5" stroke-linecap="round" />
+                                    </g>
+                                    <g class="reacto-wave">
+                                        <path d="M8 45.4C17.7 38.6 27.8 37.4 39.3 40.3C46.4 42.1 52.6 42.1 58 39.8V45.8C51.7 49 44.8 49.7 36.9 47.8C25.7 45.1 17.4 45.6 8 53V45.4Z" fill="url(#industrialWaveGradient)" />
+                                        <path d="M8.2 45.7C17.6 40.1 27.7 39.4 37.4 41.8C45.7 43.9 52.1 43.7 57.8 40.9" stroke="#e5fff5" stroke-width="1.8" stroke-linecap="round" opacity="0.62" />
+                                    </g>
+                                    <circle class="reacto-accent" cx="11.2" cy="20.2" r="2.35" fill="#ff7c6e" />
+                                </svg>
+                            </div>
+                            <span class="reacto-brand-word">REACTO</span>
+                        </div>
+                        <p class="text-xs text-gray-500">Enterprise Water Intelligence</p>
+                    </div>
+                    
+                    <div class="hidden md:flex items-center space-x-1">
+                        <button class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg">Dashboard</button>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Analytics</button>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Control</button>
+                        <button class="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Reports</button>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full status-indicator"></div>
+                        <span class="text-sm text-gray-600">System Online</span>
+                    </div>
+                    <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10"></div>
+        <div class="relative max-w-7xl mx-auto px-6 py-24">
+            <div class="text-center">
+                <div class="flex justify-center mb-8">
+                    <div class="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-2xl">
+                        <i data-lucide="droplets" class="w-14 h-14 text-white"></i>
+                    </div>
+                </div>
+                <h1 class="text-6xl md:text-7xl font-bold text-gray-900 mb-6">
+                    Reacto Platform
+                    <span class="block text-4xl md:text-5xl text-blue-600 mt-2">Industrial Water Treatment Intelligence</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+                    Enterprise-grade monitoring and control system for sewage treatment plants. 
+                    Real-time insights, process-driven optimization, and industrial-strength reliability 
+                    for large-scale water treatment facilities.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="showDashboard()" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2">
+                        <i data-lucide="play" class="w-5 h-5"></i>
+                        <span>View Live Dashboard</span>
+                    </button>
+                    <button onclick="showAnalytics()" class="px-8 py-4 bg-white text-gray-900 font-semibold rounded-xl border border-gray-300 hover:bg-gray-50 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        <span>Analytics Suite</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industrial Dashboard View -->
+    <div id="dashboardView" class="hidden">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <!-- Control Bar -->
+            <div class="glass-effect rounded-xl p-4 mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center space-x-3">
+                            <label class="text-sm font-medium text-gray-700">Plant:</label>
+                            <select class="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <option>Main STP Facility</option>
+                                <option>Secondary Treatment Unit</option>
+                                <option>Tertiary Treatment Plant</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <label class="text-sm font-medium text-gray-700">Time Range:</label>
+                            <div class="flex bg-gray-100 rounded-lg p-1">
+                                <button class="px-3 py-1 text-xs font-medium rounded-md bg-white text-blue-600 shadow-sm">24h</button>
+                                <button class="px-3 py-1 text-xs font-medium rounded-md text-gray-600 hover:text-gray-900">7d</button>
+                                <button class="px-3 py-1 text-xs font-medium rounded-md text-gray-600 hover:text-gray-900">30d</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 text-sm text-gray-500">
+                        <i data-lucide="activity" class="w-4 h-4"></i>
+                        <span>Last updated: Just now</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <!-- Flow Rate Card -->
+                <div class="industrial-card rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="activity" class="w-5 h-5 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Flow Rate</p>
+                                <p class="text-xs text-gray-500">Inflow Volume</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <div>
+                            <span class="text-2xl font-bold text-gray-900">125.5</span>
+                            <span class="ml-1 text-sm text-gray-500">MLD</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500">Capacity</span>
+                            <p class="text-sm font-medium text-gray-700">83.7%</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: 83.7%"></div>
+                    </div>
+                </div>
+
+                <!-- BOD Card -->
+                <div class="industrial-card rounded-xl border-red-200 bg-red-50 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="gauge" class="w-5 h-5 text-orange-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">BOD</p>
+                                <p class="text-xs text-gray-500">Biochemical Oxygen</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-red-500"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <div>
+                            <span class="text-2xl font-bold text-red-600">45.8</span>
+                            <span class="ml-1 text-sm text-gray-500">mg/L</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500">Status</span>
+                            <p class="text-sm font-medium text-red-600">Critical</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center space-x-2 text-xs text-gray-500">
+                        <i data-lucide="alert-triangle" class="w-3 h-3 text-orange-500"></i>
+                        <span>Limit: 30 mg/L</span>
+                    </div>
+                </div>
+
+                <!-- COD Card -->
+                <div class="industrial-card rounded-xl border-yellow-200 bg-yellow-50 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="filter" class="w-5 h-5 text-yellow-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">COD</p>
+                                <p class="text-xs text-gray-500">Chemical Oxygen</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <i data-lucide="minus" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <div>
+                            <span class="text-2xl font-bold text-yellow-600">285.3</span>
+                            <span class="ml-1 text-sm text-gray-500">mg/L</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500">Status</span>
+                            <p class="text-sm font-medium text-yellow-600">Warning</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center space-x-2 text-xs text-gray-500">
+                        <i data-lucide="alert-triangle" class="w-3 h-3 text-yellow-500"></i>
+                        <span>Limit: 250 mg/L</span>
+                    </div>
+                </div>
+
+                <!-- Efficiency Card -->
+                <div class="industrial-card rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="zap" class="w-5 h-5 text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Efficiency</p>
+                                <p class="text-xs text-gray-500">Treatment Rate</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline justify-between">
+                        <div>
+                            <span class="text-2xl font-bold text-green-600">72.5</span>
+                            <span class="ml-1 text-sm text-gray-500">%</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500">Grade</span>
+                            <p class="text-sm font-medium text-green-600">Good</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full" style="width: 72.5%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="industrial-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">BOD Levels - 24 Hour Trend</h3>
+                    <div class="chart-container">
+                        <canvas id="bodChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="industrial-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Water Flow Analysis</h3>
+                    <div class="chart-container">
+                        <canvas id="flowChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            <div class="industrial-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900">Active Alerts</h2>
+                    <button class="text-sm text-blue-600 hover:text-blue-700 font-medium">View All</button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-semibold text-red-900">Critical BOD Level</h3>
+                                <span class="text-xs text-red-600">2 min ago</span>
+                            </div>
+                            <p class="text-sm text-red-800 mb-3">
+                                BOD level has reached critical threshold at 45.8 mg/L. Immediate action required to prevent compliance violation.
+                            </p>
+                            <div class="flex items-center space-x-4 text-xs text-red-700">
+                                <span>Current: 45.8 mg/L</span>
+                                <span>•</span>
+                                <span>Limit: 30 mg/L</span>
+                                <span>•</span>
+                                <span>Duration: 45 min</span>
+                            </div>
+                            <div class="mt-3 flex items-center space-x-2">
+                                <button class="px-3 py-1 bg-red-600 text-white text-xs font-medium rounded-lg hover:bg-red-700">
+                                    Take Action
+                                </button>
+                                <button class="px-3 py-1 bg-white text-red-600 text-xs font-medium rounded-lg border border-red-300 hover:bg-red-50">
+                                    Acknowledge
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-semibold text-yellow-900">Elevated COD Levels</h3>
+                                <span class="text-xs text-yellow-600">15 min ago</span>
+                            </div>
+                            <p class="text-sm text-yellow-800 mb-3">
+                                COD levels are above normal range. Monitor closely and consider optimizing chemical dosing.
+                            </p>
+                            <div class="flex items-center space-x-4 text-xs text-yellow-700">
+                                <span>Current: 285.3 mg/L</span>
+                                <span>•</span>
+                                <span>Limit: 250 mg/L</span>
+                                <span>•</span>
+                                <span>Trend: Increasing</span>
+                            </div>
+                            <div class="mt-3 flex items-center space-x-2">
+                                <button class="px-3 py-1 bg-yellow-600 text-white text-xs font-medium rounded-lg hover:bg-yellow-700">
+                                    View Details
+                                </button>
+                                <button class="px-3 py-1 bg-white text-yellow-600 text-xs font-medium rounded-lg border border-yellow-300 hover:bg-yellow-50">
+                                    Schedule Check
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics View -->
+    <div id="analyticsView" class="hidden">
+        <div class="max-w-7xl mx-auto px-6 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="industrial-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Treatment Efficiency Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="industrial-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Compliance Status</h3>
+                    <div class="chart-container">
+                        <canvas id="complianceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="industrial-card rounded-xl p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Performance Metrics</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-2">
+                            <span class="text-gray-600">Uptime</span>
+                            <span class="font-medium text-gray-900">99.8%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-green-500 h-3 rounded-full" style="width: 99.8%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-2">
+                            <span class="text-gray-600">Response Time</span>
+                            <span class="font-medium text-gray-900">120ms</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-blue-500 h-3 rounded-full" style="width: 88%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-2">
+                            <span class="text-gray-600">Data Quality</span>
+                            <span class="font-medium text-gray-900">95.2%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-purple-500 h-3 rounded-full" style="width: 95.2%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="featuresSection" class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Industrial-Grade Capabilities</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Built for the demands of large-scale water treatment operations with enterprise security, 
+                  scalability, and reliability.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="industrial-card rounded-2xl p-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="activity" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Real-Time Monitoring</h3>
+                    <p class="text-gray-600 mb-4">
+                        Sub-second data acquisition from 100+ sensor points with industrial-grade PLC integration 
+                        and redundant data pipelines.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>1000+ data points per second</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>PLC & SCADA integration</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Redundant data pipelines</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="industrial-card rounded-2xl p-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Process Optimization Engine</h3>
+                    <p class="text-gray-600 mb-4">
+                        Machine learning algorithms analyze patterns and predict issues before they occur, 
+                        optimizing chemical usage and energy consumption.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Predictive maintenance</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Chemical usage optimization</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Energy efficiency algorithms</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="industrial-card rounded-2xl p-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
+                        <i data-lucide="settings" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Industrial Control</h3>
+                    <p class="text-gray-600 mb-4">
+                        Remote control of pumps, valves, and chemical dosing systems with safety interlocks 
+                        and emergency shutdown capabilities.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Remote pump/valve control</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Safety interlock systems</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-green-500"></i>
+                            <span>Emergency shutdown</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col items-center gap-4 text-center text-sm text-gray-400">
+                <div class="reacto-brand">
+                    <div class="reacto-brand-mark">
+                        <svg viewBox="0 0 64 64" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="industrialFooterDropGradient" x1="20" y1="8" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#9bd4e4" />
+                                    <stop offset="0.52" stop-color="#39ace7" />
+                                    <stop offset="1" stop-color="#0784b5" />
+                                </linearGradient>
+                                <linearGradient id="industrialFooterWaveGradient" x1="10" y1="44" x2="58" y2="52" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0" stop-color="#3fb07f" />
+                                    <stop offset="1" stop-color="#0a7b63" />
+                                </linearGradient>
+                            </defs>
+                            <g class="reacto-drop">
+                                <path d="M34.4 6.8C28.2 14.1 22 22 22 30.7C22 39.9 29.4 47.3 38.6 47.3C47.8 47.3 55.2 39.9 55.2 30.7C55.2 22.6 49 15 42.5 8.1C40.3 5.8 36.7 5.8 34.4 6.8Z" fill="url(#industrialFooterDropGradient)" />
+                                <path d="M33.5 18.5C31.1 21.8 29.8 24.6 29.8 27.4C29.8 32 33.6 35.8 38.2 35.8" stroke="#d8f4ff" stroke-width="2.5" stroke-linecap="round" />
+                            </g>
+                            <g class="reacto-wave">
+                                <path d="M8 45.4C17.7 38.6 27.8 37.4 39.3 40.3C46.4 42.1 52.6 42.1 58 39.8V45.8C51.7 49 44.8 49.7 36.9 47.8C25.7 45.1 17.4 45.6 8 53V45.4Z" fill="url(#industrialFooterWaveGradient)" />
+                                <path d="M8.2 45.7C17.6 40.1 27.7 39.4 37.4 41.8C45.7 43.9 52.1 43.7 57.8 40.9" stroke="#e5fff5" stroke-width="1.8" stroke-linecap="round" opacity="0.62" />
+                            </g>
+                            <circle class="reacto-accent" cx="11.2" cy="20.2" r="2.35" fill="#ff7c6e" />
+                        </svg>
+                    </div>
+                    <span class="reacto-brand-word">REACTO</span>
+                </div>
+                <p>&copy; 2024 Reacto Platform. All rights reserved. | ISO 9001:2015 Certified | Enterprise Water Treatment Intelligence</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // View switching functions
+        function showDashboard() {
+            document.getElementById('featuresSection').classList.add('hidden');
+            document.getElementById('analyticsView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('hidden');
+            initializeCharts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showAnalytics() {
+            document.getElementById('featuresSection').classList.add('hidden');
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('analyticsView').classList.remove('hidden');
+            initializeAnalyticsCharts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showHome() {
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('analyticsView').classList.add('hidden');
+            document.getElementById('featuresSection').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function makeAreaGradient(ctx, colorHex) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+            gradient.addColorStop(0, colorHex + '4d');
+            gradient.addColorStop(1, colorHex + '08');
+            return gradient;
+        }
+
+        function getReferenceLineOptions() {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 8,
+                            color: '#476b84',
+                            font: { size: 11, weight: '700' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255,255,255,0.98)',
+                        titleColor: '#5b7a95',
+                        bodyColor: '#123f67',
+                        borderColor: '#dce7f1',
+                        borderWidth: 1,
+                        displayColors: false,
+                        padding: 9
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#e3ebf3' },
+                        ticks: { color: '#7891a4', font: { size: 10, weight: '700' }, maxRotation: 0 }
+                    },
+                    y: {
+                        grid: { color: '#e3ebf3' },
+                        border: { display: false },
+                        ticks: { color: '#7f97aa', font: { size: 10, weight: '700' } }
+                    }
+                },
+                interaction: { mode: 'index', intersect: false }
+            };
+        }
+
+        // Chart initialization
+        function initializeCharts() {
+            // BOD Chart
+            const bodCtx = document.getElementById('bodChart').getContext('2d');
+            const bodColor = '#c7ab22';
+            new Chart(bodCtx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
+                    datasets: [{
+                        label: 'BOD (mg/L)',
+                        data: [28.5, 31.2, 35.8, 42.1, 45.8, 38.4, 41.2],
+                        borderColor: bodColor,
+                        backgroundColor: makeAreaGradient(bodCtx, bodColor),
+                        tension: 0.42,
+                        fill: true,
+                        borderWidth: 2.2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: bodColor,
+                        pointBorderWidth: 1.4
+                    }, {
+                        label: 'Limit (mg/L)',
+                        data: [30, 30, 30, 30, 30, 30, 30],
+                        borderColor: '#9cafc0',
+                        borderDash: [4, 3],
+                        fill: false,
+                        borderWidth: 1.3,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    ...getReferenceLineOptions(),
+                    scales: {
+                        ...getReferenceLineOptions().scales,
+                        y: {
+                            ...getReferenceLineOptions().scales.y,
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+
+            // Flow Chart
+            const flowCtx = document.getElementById('flowChart').getContext('2d');
+            new Chart(flowCtx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
+                    datasets: [{
+                        label: 'Inflow (MLD)',
+                        data: [110, 95, 135, 142, 138, 125, 118],
+                        borderColor: '#5c96c2',
+                        backgroundColor: makeAreaGradient(flowCtx, '#5c96c2'),
+                        tension: 0.42,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }, {
+                        label: 'Treated (MLD)',
+                        data: [105, 92, 128, 135, 132, 118, 112],
+                        borderColor: '#6ea77f',
+                        backgroundColor: makeAreaGradient(flowCtx, '#6ea77f'),
+                        tension: 0.42,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }, {
+                        label: 'Reused (MLD)',
+                        data: [78, 65, 92, 98, 94, 85, 80],
+                        borderColor: '#c7ab22',
+                        backgroundColor: makeAreaGradient(flowCtx, '#c7ab22'),
+                        tension: 0.42,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }]
+                },
+                options: getReferenceLineOptions()
+            });
+        }
+
+        function initializeAnalyticsCharts() {
+            // Efficiency Chart
+            const efficiencyCtx = document.getElementById('efficiencyChart').getContext('2d');
+            new Chart(efficiencyCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Primary Treatment', 'Secondary Treatment', 'Tertiary Treatment', 'Losses'],
+                    datasets: [{
+                        data: [35, 40, 20, 5],
+                        backgroundColor: [
+                            '#5c96c2',
+                            '#6ea77f',
+                            '#c7ab22',
+                            '#d67f73'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                color: '#476b84',
+                                font: { size: 11, weight: '700' }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Compliance Chart
+            const complianceCtx = document.getElementById('complianceChart').getContext('2d');
+            new Chart(complianceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['BOD', 'COD', 'Turbidity', 'pH', 'Chlorine'],
+                    datasets: [{
+                        label: 'Current',
+                        data: [45.8, 285.3, 3.2, 7.2, 0.8],
+                        backgroundColor: '#5c96c2'
+                    }, {
+                        label: 'Limit',
+                        data: [30, 250, 5, 8.5, 2.0],
+                        backgroundColor: '#a6b6c4'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8,
+                                color: '#476b84',
+                                font: { size: 11, weight: '700' }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { color: '#e3ebf3' }, ticks: { color: '#7f97aa', font: { size: 10, weight: '700' } } },
+                        y: { grid: { color: '#edf3f8' }, ticks: { color: '#7891a4', font: { size: 10, weight: '700' } } }
+                    }
+                }
+            });
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const elements = document.querySelectorAll('.text-2xl');
+            if (elements.length > 0) {
+                const randomElement = elements[Math.floor(Math.random() * 3)];
+                const currentValue = parseFloat(randomElement.textContent);
+                const change = (Math.random() - 0.5) * 2;
+                const newValue = (currentValue + change).toFixed(1);
+                randomElement.textContent = newValue;
+            }
+        }, 3000);
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
