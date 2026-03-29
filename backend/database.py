@@ -6,8 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Use SQLite for demonstration instead of PostgreSQL
+# Use SQLite for demonstration instead of PostgreSQL.
+# Render often provides DATABASE_URL with postgres://, while SQLAlchemy expects postgresql://.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./reacto_platform.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 engine_kwargs = {"pool_pre_ping": True}
 if DATABASE_URL.startswith("sqlite"):
