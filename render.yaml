@@ -41,4 +41,8 @@ services:
     rootDir: .
     buildCommand: echo Deploying enterprise static UI
     staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /enterprise-ui.html
     pullRequestPreviewsEnabled: false
