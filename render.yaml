@@ -38,12 +38,7 @@ services:
   - type: web
     name: reacto-frontend
     env: static
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    staticPublishPath: build
+    rootDir: .
+    buildCommand: echo Deploying enterprise static UI
+    staticPublishPath: .
     pullRequestPreviewsEnabled: false
-    envVars:
-      - key: REACT_APP_API_BASE_URL
-        sync: false
-      - key: REACT_APP_WS_BASE_URL
-        sync: false
