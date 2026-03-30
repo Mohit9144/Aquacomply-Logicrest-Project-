@@ -1,4 +1,6 @@
 [build]
+  base = "."
+  command = "echo Static deploy from repo root"
   publish = "."
 
 [build.environment]
