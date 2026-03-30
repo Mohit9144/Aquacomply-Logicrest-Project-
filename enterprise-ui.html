@@ -2782,7 +2782,7 @@
                                                 trendData.length - 1
                                             ])];
                                             const getX = (idx) => 10 + (idx / (trendData.length - 1)) * 86;
-                                            const getY = (val) => 43 - ((val - yPlotMin) / yRange) * 30;
+                                            const getY = (val) => 41.5 - ((val - yPlotMin) / yRange) * 28;
                                             const smoothLinePathD = trendData.reduce((acc, d, idx) => {
                                                 const x = getX(idx);
                                                 const y = getY(d.val);
@@ -2826,7 +2826,7 @@
                                                             <span>Min {runMin}</span>
                                                         </div>
 
-                                                        <div className="relative h-60 w-full mb-2 client-kpi-chart px-3 py-2">
+                                                        <div className="relative h-60 w-full mb-2 client-kpi-chart px-3 py-2 overflow-hidden">
                                                             <div className="absolute left-2 top-1 z-20 text-[10px] font-black bg-white border rounded-md px-2 py-1" style={{ color: '#2a5b78', borderColor: '#d6e4ef' }}>Trend Overview</div>
                                                             <div className="absolute right-2 top-1 z-20 flex items-center gap-1.5 bg-white border rounded-md px-2 py-1.5" style={{ borderColor: '#d6e4ef' }}>
                                                                 <span className="text-[11px] font-black px-2.5 py-1 rounded bg-[#e67e22] text-white">24H</span>
@@ -2836,15 +2836,15 @@
                                                             <div className="pt-8 h-full">
                                                                 <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,1.35fr)] lg:gap-1 lg:overflow-visible lg:snap-none lg:pb-0 lg:items-stretch">
                                                                     <div className="min-w-full lg:min-w-0 snap-start">
-                                                                        <svg viewBox="0 0 100 58" preserveAspectRatio="none" className="w-full h-[168px] lg:h-full relative z-10 overflow-hidden">
+                                                                        <svg viewBox="0 0 100 58" preserveAspectRatio="none" className="w-full h-[158px] lg:h-[176px] block relative z-10 overflow-hidden">
                                                                     <defs>
                                                                         <linearGradient id={`clientArea-${k.id}`} x1="0" y1="0" x2="0" y2="1">
                                                                             <stop offset="0%" stopColor={areaTop} stopOpacity="0.32" />
                                                                             <stop offset="100%" stopColor={areaTop} stopOpacity="0.04" />
                                                                         </linearGradient>
                                                                     </defs>
-                                                                    <line x1="10" y1="11" x2="10" y2="45" stroke={axisColor} strokeWidth="0.8" />
-                                                                    <line x1="10" y1="45" x2="96" y2="45" stroke={axisColor} strokeWidth="0.8" />
+                                                                    <line x1="10" y1="10" x2="10" y2="43" stroke={axisColor} strokeWidth="0.8" />
+                                                                    <line x1="10" y1="43" x2="96" y2="43" stroke={axisColor} strokeWidth="0.8" />
 
                                                                     {yTickValues.map((tickVal, idx) => (
                                                                         <g key={`grid-${k.id}-${idx}`}>
@@ -2871,7 +2871,7 @@
                                                                         <text
                                                                             key={`${d.time}-${idx}`}
                                                                             x={getX(trendData.findIndex(t => t.time === d.time))}
-                                                                            y="48.4"
+                                                                            y="46.2"
                                                                             textAnchor="middle"
                                                                             fontSize="2.9"
                                                                             fontWeight="900"
@@ -3754,7 +3754,7 @@
                                                     trendData.length - 1
                                                 ])];
                                                 const getX = (idx) => 10 + (idx / (trendData.length - 1)) * 86;
-                                                const getY = (val) => 43 - ((val - yPlotMin) / yRange) * 30;
+                                                const getY = (val) => 41.5 - ((val - yPlotMin) / yRange) * 28;
                                                 const smoothLinePath = trendData.reduce((acc, d, idx) => {
                                                     const x = getX(idx);
                                                     const y = getY(d.val);
@@ -3820,7 +3820,7 @@
                                                                 <span>Min {runMin}</span>
                                                             </div>
 
-                                                            <div className="relative w-full mb-2 bg-[#f7fbff] border border-[#d7e7f1] rounded-lg px-2 py-2" style={{ height: '17.6rem' }}>
+                                                            <div className="relative w-full mb-2 bg-[#f7fbff] border border-[#d7e7f1] rounded-lg px-2 py-2 overflow-hidden" style={{ height: '17.6rem' }}>
                                                                 <div className="absolute left-2 top-1 z-20 text-[9px] font-black bg-white border border-[#d7e7f1] rounded-md px-2 py-1 text-[#0d4f7d]">Last 24 Hours</div>
                                                                 <div className="absolute right-2 top-1 z-20 flex items-center gap-1.5 bg-white border rounded-md px-2 py-1.5" style={{ borderColor: '#d7e7f1' }}>
                                                                     <span className="text-[10px] font-black px-2.5 py-1 rounded bg-[#e67e22] text-white">24H</span>
@@ -3830,9 +3830,9 @@
                                                                 <div className="pt-8 h-full">
                                                                     <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,1.35fr)] lg:gap-1 lg:overflow-visible lg:snap-none lg:pb-0 lg:items-stretch">
                                                                         <div className="min-w-full lg:min-w-0 snap-start">
-                                                                            <svg viewBox="0 0 100 58" preserveAspectRatio="none" className="w-full h-[168px] lg:h-full relative z-10 overflow-hidden">
-                                                                        <line x1="10" y1="11" x2="10" y2="45" stroke="#b7c8d7" strokeWidth="0.8" />
-                                                                        <line x1="10" y1="45" x2="96" y2="45" stroke="#b7c8d7" strokeWidth="0.8" />
+                                                                            <svg viewBox="0 0 100 58" preserveAspectRatio="none" className="w-full h-[158px] lg:h-[176px] block relative z-10 overflow-hidden">
+                                                                        <line x1="10" y1="10" x2="10" y2="43" stroke="#b7c8d7" strokeWidth="0.8" />
+                                                                        <line x1="10" y1="43" x2="96" y2="43" stroke="#b7c8d7" strokeWidth="0.8" />
                                                                         {yTickValues.map((tickVal, idx) => (
                                                                             <g key={`agrid-${k.label}-${idx}`}>
                                                                                 <line x1="10" y1={getY(tickVal)} x2="96" y2={getY(tickVal)} stroke="#e3ebf3" strokeWidth="0.6" />
@@ -3864,7 +3864,7 @@
                                                                             <text
                                                                                 key={`${d.time}-${idx}`}
                                                                                 x={getX(trendData.findIndex(t => t.time === d.time))}
-                                                                                y="48.4"
+                                                                                y="46.2"
                                                                                 textAnchor="middle"
                                                                                 fontSize="2.9"
                                                                                 fontWeight="900"
