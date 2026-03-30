@@ -4595,6 +4595,10 @@
                                                 <div className="font-black text-[18px] flex items-center gap-2" style={{ color: '#0d3f66' }}><SectionLogo kind="data" /> Recent Exports</div>
                                                 <span className="text-[13px] font-black" style={{ color: '#4f7190' }}>Last 7 days</span>
                                             </div>
+                                            <div className="px-4 pt-3 md:hidden">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.08em] text-[#6f8ca1] text-center">Swipe horizontally to view full export details</div>
+                                            </div>
+                                            <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                                             {[
                                                 { name: 'Pune_IT_Park_March_2026.csv', size: '2.4 MB', time: 'Today 9:30 AM', status: 'Ready', site: 'Pune IT Park' },
                                                 { name: 'All_Sites_Report_Q1_2026.pdf', size: '5.1 MB', time: 'Yesterday 6:00 PM', status: 'Ready', site: 'Guangzhou Industrial' },
@@ -4603,7 +4607,7 @@
                                             ].map((r, i) => {
                                                 const logoMeta = getClientLogoMeta(r.site, r.status === 'Archived' ? 'warning' : 'optimal');
                                                 return (
-                                                <div key={i} className="flex items-center gap-4 px-6 py-4" style={{ borderBottom: '1px solid rgba(155,212,228,0.3)' }}
+                                                <div key={i} className="flex items-center gap-4 px-6 py-4" style={{ borderBottom: '1px solid rgba(155,212,228,0.3)', minWidth: 760 }}
                                                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.24)'}
                                                     onMouseLeave={e => e.currentTarget.style.background = ''}>
                                                     <div className="client-logo-badge sm" style={{ background: logoMeta.tone.bg, borderColor: logoMeta.tone.border, color: logoMeta.tone.text }}>
@@ -4619,6 +4623,7 @@
                                                 </div>
                                                 );
                                             })}
+                                            </div>
                                         </div>
                                     </div>
                                 )}
