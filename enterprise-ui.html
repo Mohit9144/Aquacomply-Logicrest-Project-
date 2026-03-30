@@ -4468,7 +4468,11 @@
                                                     <Icon name="UserPlus" size={14} /> Invite User
                                                 </button>
                                             </div>
-                                            <table className="admin-table">
+                                            <div className="px-3 pt-3 md:hidden">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.08em] text-[#6f8ca1] text-center">Swipe horizontally to view full user details</div>
+                                            </div>
+                                            <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                                            <table className="admin-table" style={{ minWidth: 760 }}>
                                                 <thead><tr><th>User</th><th>Role</th><th>Site Access</th><th style={{ textAlign: 'center' }}>Status</th><th style={{ textAlign: 'right' }}>Actions</th></tr></thead>
                                                 <tbody>
                                                     {[
@@ -4493,6 +4497,7 @@
                                                     ))}
                                                 </tbody>
                                             </table>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
