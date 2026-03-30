@@ -1,13 +1,11 @@
 [build]
-  base = "frontend"
-  command = "npm run build"
-  publish = "build"
+  publish = "."
 
 [build.environment]
   NODE_VERSION = "18"
   CI = "false"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/"
+  to = "/enterprise-ui.html"
   status = 200
