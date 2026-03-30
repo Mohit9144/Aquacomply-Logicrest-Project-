@@ -1490,6 +1490,23 @@
             }
         }
 
+        @media (min-width: 1025px) {
+            .client-dashboard-shell .client-sidebar,
+            .admin-dashboard-shell .admin-sidebar {
+                transition: width 0.28s ease, min-width 0.28s ease, opacity 0.22s ease;
+            }
+
+            .client-dashboard-shell.sidebar-collapsed .client-sidebar,
+            .admin-dashboard-shell.sidebar-collapsed .admin-sidebar {
+                width: 0 !important;
+                min-width: 0 !important;
+                overflow: hidden !important;
+                border-right: 0 !important;
+                box-shadow: none !important;
+                opacity: 0;
+            }
+        }
+
         .client-dashboard-shell .kpi-card {
             background: linear-gradient(145deg, rgba(255, 255, 255, 0.93), rgba(238, 246, 253, 0.88));
             backdrop-filter: blur(10px) saturate(116%);
@@ -2461,7 +2478,7 @@
         };
         const ClientDashboard = ({ plantConfig, onLogout }) => {
             const [activeTab, setActiveTab] = useState('dashboard');
-            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 1024);
             const [data, setData] = useState({
                 flow: plantConfig.cap, treated: plantConfig.cap * 0.95, reused: plantConfig.cap * 0.6,
                 bod: plantConfig.baseBod, cod: plantConfig.baseCod, turb: 4.2, cl2: 1.5,
@@ -2553,7 +2570,7 @@
             }, [activeTab]);
 
             return (
-                <div className="admin-bg client-dashboard-shell flex font-sans relative" style={{ minHeight: '100vh', height: '100dvh', overflow: 'hidden' }}>
+                <div className={`admin-bg client-dashboard-shell flex font-sans relative ${sidebarOpen ? '' : 'sidebar-collapsed'}`} style={{ minHeight: '100vh', height: '100dvh', overflow: 'hidden' }}>
                     <BrandWatermark />
                     {sidebarOpen && <button aria-label="Close navigation" onClick={() => setSidebarOpen(false)} className="lg:hidden fixed inset-0 bg-slate-900/45 backdrop-blur-[2px] z-[105]"></button>}
                     {/* CLIENT SIDEBAR */}
@@ -2597,7 +2614,7 @@
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflowY: 'auto' }}>
                         <div className="admin-header">
                             <div className="flex items-start gap-3">
-                                <button aria-label="Open navigation" onClick={() => setSidebarOpen(true)} className="mobile-menu-button">
+                                <button aria-label="Toggle navigation" onClick={() => setSidebarOpen(v => !v)} className="mobile-menu-button">
                                     <span className="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
                                 </button>
                                 <div>
@@ -3391,7 +3408,7 @@
             const [alertFilter, setAlertFilter] = useState('All');
             const [searchQuery, setSearchQuery] = useState('');
             const [showRegister, setShowRegister] = useState(false);
-            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 1024);
             const handleNewPlant = (newPlant) => {
                 setPlants([...plants, newPlant]);
                 setShowRegister(false);
@@ -3463,7 +3480,7 @@
             };
 
             return (
-                <div className="admin-bg admin-dashboard-shell flex font-sans relative" style={{ minHeight: '100vh', height: '100dvh', overflow: 'hidden' }}>
+                <div className={`admin-bg admin-dashboard-shell flex font-sans relative ${sidebarOpen ? '' : 'sidebar-collapsed'}`} style={{ minHeight: '100vh', height: '100dvh', overflow: 'hidden' }}>  
                     {showRegister && <RegisterModal onClose={() => setShowRegister(false)} onRegister={handleNewPlant} />}
                     {sidebarOpen && <button aria-label="Close navigation" onClick={() => setSidebarOpen(false)} className="lg:hidden fixed inset-0 bg-slate-900/45 backdrop-blur-[2px] z-[105]"></button>}
                     {/*  SIDEBAR  */}
@@ -3534,7 +3551,7 @@
                         {/* Header */}
                         <div className="admin-header">
                             <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <button aria-label="Open navigation" onClick={() => setSidebarOpen(true)} className="mobile-menu-button">
+                                <button aria-label="Toggle navigation" onClick={() => setSidebarOpen(v => !v)} className="mobile-menu-button">
                                     <span className="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
                                 </button>
                                 {selected !== 'ALL' && (
